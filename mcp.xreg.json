@@ -1,0 +1,417 @@
+{
+  "specversion": "1.0-rc1",
+
+  "endpoints": {
+    "MCP.WebSocket.Client": {
+      "description": "WebSocket endpoint on the client side used to send MCP CloudEvents requests to the remote MCP server.",
+      "usage": "producer",
+      "protocol": "WebSocket",
+      "deployed": false,
+      "endpoints": [{ "uri": "wss://example.com/mcp" }],
+      "envelope": "CloudEvents/1.0",
+      "messagegroups": ["#/messagegroups/MCP.Requests"]
+    },
+
+    "MCP.WebSocket.Server": {
+      "description": "WebSocket endpoint on the server side that receives MCP requests and produces responses & notifications.",
+      "usage": "consumer",
+      "protocol": "WebSocket",
+      "deployed": false,
+      "endpoints": [{ "uri": "wss://example.com/mcp" }],
+      "envelope": "CloudEvents/1.0",
+      "messagegroups": [
+        "#/messagegroups/MCP.Responses",
+        "#/messagegroups/MCP.Notifications"
+      ]
+    }
+  },
+
+  "messagegroups": {
+    "MCP.Requests": {
+      "description": "All MCP request CloudEvents sent from client to server.",
+      "envelope": "CloudEvents/1.0",
+      "messages": {
+        "mcp.tools.call.request": {
+          "description": "Invoke a tool on the server side.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": { "value": "mcp.tools.call.request", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.tools.call.request.data"
+        },
+        "mcp.resources.read.request": {
+          "description": "Read a resource via MCP.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": { "value": "mcp.resources.read.request", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.resources.read.request.data"
+        },
+        "mcp.prompts.get.request": {
+          "description": "Instantiate a prompt template.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": { "value": "mcp.prompts.get.request", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.prompts.get.request.data"
+        },
+        "mcp.sampling.createMessage.request": {
+          "description": "Server‑initiated text generation request.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": {
+              "value": "mcp.sampling.createMessage.request",
+              "required": true
+            }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.sampling.createMessage.request.data"
+        },
+        "mcp.meta.request": {
+          "description": "Retrieve consolidated capability manifest.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": { "value": "mcp.meta.request", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.meta.request.data"
+        }
+      }
+    },
+
+    "MCP.Responses": {
+      "description": "All MCP response CloudEvents sent from server to client.",
+      "envelope": "CloudEvents/1.0",
+      "messages": {
+        "mcp.tools.call.response": {
+          "description": "Result of a tools/call request.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": { "value": "mcp.tools.call.response", "required": true },
+            "correlationid": { "type": "string", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.tools.call.response.data"
+        },
+        "mcp.resources.read.response": {
+          "description": "Return of a resources/read request.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": {
+              "value": "mcp.resources.read.response",
+              "required": true
+            },
+            "correlationid": { "type": "string", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.resources.read.response.data"
+        },
+        "mcp.prompts.get.response": {
+          "description": "Return of a prompts/get request.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": { "value": "mcp.prompts.get.response", "required": true },
+            "correlationid": { "type": "string", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.prompts.get.response.data"
+        },
+        "mcp.sampling.createMessage.response": {
+          "description": "Return of a sampling/createMessage request.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": {
+              "value": "mcp.sampling.createMessage.response",
+              "required": true
+            },
+            "correlationid": { "type": "string", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.sampling.createMessage.response.data"
+        },
+        "mcp.meta.response": {
+          "description": "Return of a meta request.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "id": { "type": "string", "required": true },
+            "type": { "value": "mcp.meta.response", "required": true },
+            "correlationid": { "type": "string", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.meta.response.data"
+        }
+      }
+    },
+
+    "MCP.Notifications": {
+      "description": "Asynchronous notifications pushed from server to client.",
+      "envelope": "CloudEvents/1.0",
+      "messages": {
+        "mcp.tools.update.notification": {
+          "description": "Tool catalogue change notification.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "type": {
+              "value": "mcp.tools.update.notification",
+              "required": true
+            }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.tools.update.notification.data"
+        },
+        "mcp.resources.update.notification": {
+          "description": "Resource catalogue change notification.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "type": {
+              "value": "mcp.resources.update.notification",
+              "required": true
+            }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.resources.update.notification.data"
+        },
+        "mcp.prompts.update.notification": {
+          "description": "Prompt catalogue change notification.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "type": {
+              "value": "mcp.prompts.update.notification",
+              "required": true
+            }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.prompts.update.notification.data"
+        },
+        "mcp.server.shutdown.notification": {
+          "description": "Server shutdown warning.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "type": {
+              "value": "mcp.server.shutdown.notification",
+              "required": true
+            }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.server.shutdown.notification.data"
+        },
+        "mcp.error.notification": {
+          "description": "Asynchronous error report.",
+          "envelope": "CloudEvents/1.0",
+          "envelopemetadata": {
+            "type": { "value": "mcp.error.notification", "required": true }
+          },
+          "dataschemaformat": "JSONSchema/Draft-07",
+          "dataschemauri": "#/schemagroups/MCP/schemas/mcp.error.notification.data"
+        }
+      }
+    }
+  },
+
+  "schemagroups": {
+    "MCP": {
+      "schemas": {
+        "mcp.tools.call.request.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tool": { "type": "string" },
+                  "parameters": { "type": "object" }
+                },
+                "required": ["tool"]
+              }
+            }
+          }
+        },
+        "mcp.resources.read.request.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": { "uri": { "type": "string", "format": "uri" } },
+                "required": ["uri"]
+              }
+            }
+          }
+        },
+        "mcp.prompts.get.request.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "arguments": { "type": "object" }
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        },
+        "mcp.sampling.createMessage.request.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "prompt": { "type": "string" },
+                  "parameters": { "type": "object" }
+                },
+                "required": ["prompt"]
+              }
+            }
+          }
+        },
+        "mcp.meta.request.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": { "type": "object", "additionalProperties": false }
+            }
+          }
+        },
+
+        "mcp.tools.call.response.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string" },
+                  "result": { "type": "object" }
+                },
+                "required": ["status"]
+              }
+            }
+          }
+        },
+        "mcp.resources.read.response.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "mcp.prompts.get.response.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "prompt": { "type": "string" }
+                },
+                "required": ["name", "prompt"]
+              }
+            }
+          }
+        },
+        "mcp.sampling.createMessage.response.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": { "message": { "type": "string" } },
+                "required": ["message"]
+              }
+            }
+          }
+        },
+        "mcp.meta.response.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": { "type": "object" }
+            }
+          }
+        },
+
+        "mcp.tools.update.notification.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "mcp.resources.update.notification.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "mcp.prompts.update.notification.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": { "type": "object" }
+            }
+          }
+        },
+        "mcp.server.shutdown.notification.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": { "reason": { "type": "string" } },
+                "required": ["reason"]
+              }
+            }
+          }
+        },
+        "mcp.error.notification.data": {
+          "format": "JSONSchema/Draft-07",
+          "versions": {
+            "1": {
+              "format": "JSONSchema/Draft-07",
+              "schema": {
+                "type": "object",
+                "properties": { "error": { "type": "string" } },
+                "required": ["error"]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
