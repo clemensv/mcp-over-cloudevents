@@ -22,7 +22,7 @@
     "cloudevents": "^8.0.0",
     "mqtt": "^5.3.6",
     "ws": "^8.16.0",
-    "zod": "^3.22.4"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "shx": "^0.3.4",
